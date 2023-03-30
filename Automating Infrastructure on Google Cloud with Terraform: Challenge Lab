@@ -26,15 +26,15 @@ Go To variable.tf and paste following content:
 
 
 variable "region" {
- default = "****us-central1*****"
+ default = "us-east1"
 }
 
 variable "zone" {
- default = "*****us-central1-a*****"
+ default = "us-east1-c"
 }
 
 variable "project_id" {
- default = "****REPLACE PROJECT ID*****"
+ default = "qwiklabs-gcp-04-b8a9066e3877"
 }
 
 
@@ -81,7 +81,7 @@ Go to modules/instances/instances.tf then paste following content
 resource "google_compute_instance" "tf-instance-1" {
   name         = "tf-instance-1"
   machine_type = "n1-standard-1"
-  zone         = "<****Add_Zone****>"
+  zone         = "us-east1-c"
 
   boot_disk {
     initialize_params {
@@ -101,7 +101,7 @@ resource "google_compute_instance" "tf-instance-1" {
 resource "google_compute_instance" "tf-instance-2" {
   name         = "tf-instance-2"
   machine_type = "n1-standard-1"
-  zone         =  "<****Add_Zone****>"
+  zone         =  "us-east1-c"
 
   boot_disk {
     initialize_params {
@@ -127,8 +127,7 @@ terraform import module.instances.google_compute_instance.tf-instance-1 <Instanc
 
 terraform import module.instances.google_compute_instance.tf-instance-2 <Instance ID - 2>
 
-terraform plan
-terraform apply
+terraform plan && terraform apply -auto-approve
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -137,7 +136,7 @@ Add following to storage.tf
 
 
 resource "google_storage_bucket" "storage-bucket" {
-  name          = "<****YOUR-BUCKET****>"
+  name          = "tf-bucket-539502"
   location      = "US"
   force_destroy = true
   uniform_bucket_level_access = true
@@ -156,8 +155,7 @@ module "storage" {
 
 Run cloud shell : 
 
-terraform init
-terraform apply
+terraform init && terraform apply -auto-approve
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -213,19 +211,17 @@ resource "google_compute_instance" "****Instance Name****" {
 
 Run cloud shell : 
 
-terraform init
-terraform apply
+terraform init && terraform apply -auto-approve
 
 terraform taint module.instances.google_compute_instance.****Instance_name****
 
 
-terraform plan
-terraform apply
+terraform plan && terraform apply -auto-approve
 
 
 Go to instance.tf & remove instance 3
 
-terraform apply
+terraform apply -auto-approve
 
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -248,12 +244,12 @@ module "vpc" {
         {
             subnet_name           = "subnet-01"
             subnet_ip             = "10.10.10.0/24"
-            subnet_region         = "****us-central1****"
+            subnet_region         = "us-east1"
         },
         {
             subnet_name           = "subnet-02"
             subnet_ip             = "10.10.20.0/24"
-            subnet_region         = "****us-central1****"
+            subnet_region         = "us-east1"
             subnet_private_access = "true"
             subnet_flow_logs      = "true"
             description           = "This subnet has a description"
@@ -264,8 +260,7 @@ module "vpc" {
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 run cloud shell :
-terraform init
-terraform apply
+terraform init && terraform apply -auto-approve
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -278,7 +273,7 @@ Go to Instance.tf and Replace everything with following:
 resource "google_compute_instance" "tf-instance-1"{
   name         = "tf-instance-1"
   machine_type = "n1-standard-2"
-  zone         = <****var.zone****>
+  zone         = "us-east1-c"
 
   boot_disk {
     initialize_params {
@@ -287,7 +282,7 @@ resource "google_compute_instance" "tf-instance-1"{
   }
 
   network_interface {
-    network = "****VPC_NAME****"
+    network = "tf-vpc-288968"
      subnetwork = "subnet-01"
   }
   metadata_startup_script = <<-EOT
@@ -299,7 +294,7 @@ resource "google_compute_instance" "tf-instance-1"{
 resource "google_compute_instance" "tf-instance-2"{
   name         = "tf-instance-2"
   machine_type = "n1-standard-2"
-  zone         = <****var.zone****>
+  zone         = "us-east1-c"
 
   boot_disk {
     initialize_params {
@@ -308,7 +303,7 @@ resource "google_compute_instance" "tf-instance-2"{
   }
 
   network_interface {
-    network = "****VPC_NAME*****"
+    network = "tf-vpc-288968"
      subnetwork = "subnet-02"
   }
 
@@ -324,8 +319,8 @@ module "vpc" {
     source  = "terraform-google-modules/network/google"
     version = "~> 6.0.0"
 
-    project_id   = "*****PROJECT_ID****"
-    network_name = "****VPC_NAME*****"
+    project_id   = "qwiklabs-gcp-04-b8a9066e3877"
+    network_name = "tf-vpc-288968"
     routing_mode = "GLOBAL"
 
     subnets = [
@@ -352,8 +347,7 @@ module "vpc" {
 
 run cloud_shell 
 
-terraform init
-terraform apply
+terraform init && terraform apply -auto-approve
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
 
