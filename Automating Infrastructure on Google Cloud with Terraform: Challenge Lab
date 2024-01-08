@@ -1,4 +1,4 @@
-Task 1
+Task 1 - Run the following in cloudshell
 
 
 touch main.tf
@@ -22,7 +22,7 @@ cd
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-Go To variable.tf and paste following content:
+Go To variable.tf, modules/instances/variable.tf, modules/storage/variable.tf and paste the following content:
 
 
 variable "region" {
@@ -40,7 +40,7 @@ variable "project_id" {
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Add following to main.tf
+Add the following to main.tf
 
 
 
@@ -233,14 +233,14 @@ terraform apply
 
 Task 6:
 
-Go to main.tf
+Add below to main.tf
 
 
 module "vpc" {
     source  = "terraform-google-modules/network/google"
     version = "~> 6.0.0"
 
-    project_id   = "****PROJECT_ID****"
+    project_id   = var.project_id
     network_name = "****VPC_NAME****"
     routing_mode = "GLOBAL"
 
@@ -271,14 +271,14 @@ terraform apply
 
 
 
-Go to Instance.tf and Replace everything with following:
+Go to Instance.tf and Replace everything with the following:
 
 
 
 resource "google_compute_instance" "tf-instance-1"{
   name         = "tf-instance-1"
   machine_type = "n1-standard-2"
-  zone         = <****var.zone****>
+  zone         = var.zone
 
   boot_disk {
     initialize_params {
@@ -299,7 +299,7 @@ resource "google_compute_instance" "tf-instance-1"{
 resource "google_compute_instance" "tf-instance-2"{
   name         = "tf-instance-2"
   machine_type = "n1-standard-2"
-  zone         = <****var.zone****>
+  zone         = var.zone
 
   boot_disk {
     initialize_params {
@@ -324,7 +324,7 @@ module "vpc" {
     source  = "terraform-google-modules/network/google"
     version = "~> 6.0.0"
 
-    project_id   = "*****PROJECT_ID****"
+    project_id   = var.project_id
     network_name = "****VPC_NAME*****"
     routing_mode = "GLOBAL"
 
